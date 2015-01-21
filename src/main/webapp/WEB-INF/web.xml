@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <servlet>
+        <servlet-name>ZagruzkaServlet</servlet-name>
+        <servlet-class>tk.pankratov.zagruzka.web.ZagruzkaServlet</servlet-class>
+        <init-param>
+            <param-name>JDBC_URL</param-name>
+            <param-value>jdbc:mysql:http://localhost:3306/zagruzkadb</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DB_LOGIN</param-name>
+            <param-value>Anonymous</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DB_PASSWORD</param-name>
+            <param-value>PASSWD</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PARTNER_URL</param-name>
+            <param-value>http://127.0.0.1:8055/</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ZagruzkaServlet</servlet-name>
+        <url-pattern>/Zagruzka.serv</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+    <error-page>
+        <location>/errorPage.jsp</location>
+    </error-page>
+</web-app>

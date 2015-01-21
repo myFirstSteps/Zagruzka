@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.*;
-import tk.pankratov.model.Phones;
+import tk.pankratov.model.*;
 import java.net.*;
 
 /**
@@ -38,27 +38,12 @@ public class ZagruzkaServlet extends HttpServlet {
                 phoneSet.add(Long.parseLong(phoneNumber));
             }
             Phones phones = new Phones(request.getRemoteAddr(), phoneSet);
-
-            try {
-                JAXBContext context = JAXBContext.newInstance(Phones.class);
-                Marshaller m = context.createMarshaller();
-                m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-                m.marshal(phones, System.out);
-                URL url = new URL(conf.getInitParameter("PARTNER_URL"));
+               URL url = new URL(conf.getInitParameter("PARTNER_URL"));
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 con.setDoOutput(true);
                 con.setRequestMethod("GET"); //В т.з. не уточнен метод. Применяю GET
                 con.setRequestProperty("Content-Type", "text/xml");
-                m.marshal(phones, con.getOutputStream());
-                con.getOutputStream().flush();
-                System.out.println(con.getResponseCode());
-                con.disconnect();
-            } catch (JAXBException e) {
-                e.printStackTrace();
-            }catch (ConnectException e){
-                
-            }
-
+                XMLSender.sendXML(phones, con);
         } catch (NumberFormatException e) {
             response.getWriter().println("Ошибка при вводе телефонов");
         }
@@ -70,3 +55,4 @@ public class ZagruzkaServlet extends HttpServlet {
     }// </editor-fold>
 
 }
+//20:00 9ч

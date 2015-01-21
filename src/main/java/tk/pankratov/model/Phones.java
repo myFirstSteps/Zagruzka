@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.*;
  * @author pankratov
  */
 @XmlRootElement(name = "ROOT")
-public class Phones {
+public class Phones implements Sendable{
     private long time;
     private String ip;
     /*В задании не указано допускается ли дублирование номеров.

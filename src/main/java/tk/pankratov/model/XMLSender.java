@@ -1,38 +1,37 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package tk.pankratov.model;
+
 import java.io.IOException;
 import java.net.*;
 import javax.xml.bind.*;
 
-/**
- *
- * @author pankratov
- */
 public class XMLSender {
-    private URL url;
-    private String method;
-    XMLSender(URL url,String method ){
-        
+
+    static final int READ_TIMEOUT = 3000;
+
+    public static XMLAnswer sendXML(Sendable s, HttpURLConnection con) {
+        XMLAnswer answer=new XMLAnswer();
+        try {
+            JAXBContext reqContext = JAXBContext.newInstance(s.getClass());
+            Marshaller m = reqContext.createMarshaller();
+            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            m.marshal(s, System.out);
+            m.marshal(s, con.getOutputStream());
+            con.getOutputStream().flush();
+            
+            JAXBContext respContext = JAXBContext.newInstance(XMLAnswer.class);
+            Unmarshaller unm=respContext.createUnmarshaller();
+            con.setReadTimeout(READ_TIMEOUT);
+            answer.setStatus(String.valueOf(con.getResponseCode()));
+            answer=(XMLAnswer)unm.unmarshal(con.getInputStream());
+            con.disconnect();
+        } catch (PropertyException e) {
+        } catch (JAXBException e) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            con.disconnect();
+        }
+        return  answer;
     }
-    public static boolean sendXML(Sendable s, HttpURLConnection con)throws IllegalArgumentException{
-        try{
-        JAXBContext context = JAXBContext.newInstance(s.getClass());
-                Marshaller m = context.createMarshaller();
-                m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-                m.marshal(s, System.out);               
-                m.marshal(s, con.getOutputStream());
-                con.getOutputStream().flush();
-                System.out.println(con.getResponseCode());
-                con.disconnect();
-        }catch(PropertyException   e){}
-        catch (JAXBException e){}
-        catch (IOException e){ e.printStackTrace();}
-        return false;
-    }
-    
+
 }

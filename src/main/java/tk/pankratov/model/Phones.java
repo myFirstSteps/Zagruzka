@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package tk.pankratov.model;
 import java.util.*;
 import javax.xml.bind.annotation.*;
@@ -14,12 +8,12 @@ import javax.xml.bind.annotation.*;
 @XmlRootElement(name = "ROOT")
 public class Phones implements Sendable{
     private long time;
-    private String ip;
+    private String ip="";
     /*В задании не указано допускается ли дублирование номеров.
     Исходя из здравого смысла принимаю решение,что дублирование не допускается. */
     private Set<Long> phoneNumbers=new LinkedHashSet<>(); 
-    private String status;
-    private String description;
+    private String status="";
+    private String description="";
     public Phones(){}
     public Phones(String SenderIp,Set<Long>SetOfPhones){
         time=System.currentTimeMillis();

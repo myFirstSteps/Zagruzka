@@ -1,4 +1,4 @@
-package tk.pankratov.zagruzka.web;
+package tk.pankratov.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,20 +33,30 @@ public class ZagruzkaServlet extends HttpServlet {
         ServletConfig conf = getServletConfig();
         request.setCharacterEncoding("UTF-8");
         Set<Long> phoneSet = new LinkedHashSet<>();
+        XMLAnswer answer = new XMLAnswer();
         try {
             for (String phoneNumber : request.getParameter("phoneNumbers").split("\r\n")) {
                 phoneSet.add(Long.parseLong(phoneNumber));
             }
             Phones phones = new Phones(request.getRemoteAddr(), phoneSet);
-               URL url = new URL(conf.getInitParameter("PARTNER_URL"));
-                HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                con.setDoOutput(true);
-                con.setRequestMethod("GET"); //В т.з. не уточнен метод. Применяю GET
-                con.setRequestProperty("Content-Type", "text/xml");
-                XMLSender.sendXML(phones, con);
+
+            URL url = new URL(conf.getInitParameter("PARTNER_URL"));
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setDoOutput(true);
+            con.setRequestMethod("GET"); //В т.з. не уточнен метод. Применяю GET
+            con.setRequestProperty("Content-Type", "text/xml");
+            answer = XMLSender.sendXML(phones, con);
+            System.out.println(answer);
+            phones.setStatus(answer.getStatus());
+            phones.setDescription(answer.getDescription());
+            new PhonesJDBCDAO(conf.getInitParameter("JDBC_URL"), conf.getInitParameter("DB_LOGIN"), conf.getInitParameter("DB_PASSWORD")).savePhones(
+                    phones, conf.getInitParameter("PHONE_LISTS"), conf.getInitParameter("PHONES"));
+            request.setAttribute("XMLAnswer", answer );
+
         } catch (NumberFormatException e) {
             response.getWriter().println("Ошибка при вводе телефонов");
         }
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 
     @Override

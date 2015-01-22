@@ -2,18 +2,26 @@
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
         <servlet-name>ZagruzkaServlet</servlet-name>
-        <servlet-class>tk.pankratov.zagruzka.web.ZagruzkaServlet</servlet-class>
+        <servlet-class>tk.pankratov.web.ZagruzkaServlet</servlet-class>
         <init-param>
             <param-name>JDBC_URL</param-name>
-            <param-value>jdbc:mysql:http://localhost:3306/zagruzkadb</param-value>
+            <param-value>jdbc:mysql://localhost:3306/zagruzka</param-value>
         </init-param>
         <init-param>
             <param-name>DB_LOGIN</param-name>
-            <param-value>Anonymous</param-value>
+            <param-value>root</param-value>
         </init-param>
         <init-param>
             <param-name>DB_PASSWORD</param-name>
-            <param-value>PASSWD</param-value>
+            <param-value>589031</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PHONE_LISTS</param-name>
+            <param-value>phone_list</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PHONES</param-name>
+            <param-value>phones</param-value>
         </init-param>
         <init-param>
             <param-name>PARTNER_URL</param-name>

@@ -1,0 +1,21 @@
+CREATE DATABASE zagruzka character set utf8 collate utf8_general_ci;
+
+CREATE TABLE `phone_list` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `ip` varchar(16) DEFAULT NULL,
+  `status` varchar(25) DEFAULT NULL,
+  `description` varchar(254) DEFAULT NULL,
+  `date_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8; 
+
+CREATE TABLE `phones` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `phone_number` bigint(37) DEFAULT NULL,
+  `list_id` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `list_id` (`list_id`),
+  CONSTRAINT `phones_ibfk_1` FOREIGN KEY (`list_id`) REFERENCES `phone_list` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;

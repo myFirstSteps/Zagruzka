@@ -9,24 +9,27 @@
         <style type="text/css">
             h1{font-size: 20px;}
             #phones{font-size: 22px;}
-            #info{color: <c:choose><c:when test='${XMLAnswer.status ge 500}'>red</c:when>
-                          <c:otherwise>green</c:otherwise>
-            </c:choose>;}
-        </style>
-    </head>
-    <body>
-        <form id="form" action="Zagruzka.serv" method="post">
+            #info{color: <c:choose><c:when test='${XMLAnswer.httpCode ge 200 and XMLAnswer.httpCode lt 300 }'>green</c:when>
+                          <c:otherwise>red</c:otherwise>
+                      </c:choose>;}
+            </style>
+        </head>
+        <body>
+            <form id="form" action="Zagruzka.serv" method="post">
             <h1>Номера телефонов</h1>
             <span  id="info">
-                <c:if test="${XMLAnswer.status ge 500}"> Отсутствует связь с партнером!</c:if>
-            </span> <br> <%--!!!!!!!!!!!!!!!!!!!!!!!!!!!! --%>
+                <c:choose><c:when test='${XMLAnswer.httpCode ge 300}'>Отсутствует связь с партнером!</c:when> 
+                    <c:when test='${XMLAnswer!=null}'>Данные успешно переданы!
+                    </c:when>
+                </c:choose>
+            </span> <br>
             <textarea id="phones" rows="10" cols="20" name="phoneNumbers"></textarea>
-            <br><%--!!!!!!!!!!!!!!!!!!!!!!!!!!!! --%>
+            <br>
         </form>
-        <button  onclick="validate()">Отправит</button>
+        <button  onclick="validateAndSend()">Отправит</button>
         <script src='scripts/jquery-1.11.1.min.js'></script> 
         <script>
-            function validate() {
+            function validateAndSend() {
                 var delimeter = /\n/;
                 var pattern = /^7\d{10}$/;
                 var phones = ($("#phones").val()).split(delimeter);

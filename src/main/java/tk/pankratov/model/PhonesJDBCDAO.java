@@ -1,18 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tk.pankratov.model;
-
 import java.sql.*;
 import javax.sql.*;
 import java.text.*;
 
-/**
- *
- * @author pankratov
- */
 public class PhonesJDBCDAO {
 
     final String DB_URL;
@@ -36,8 +26,9 @@ public class PhonesJDBCDAO {
                 PreparedStatement phonesTableStatement = con.prepareStatement(secondStatement, Statement.RETURN_GENERATED_KEYS);
                 mainTableStatement.setNull(1, Types.NULL);
                 mainTableStatement.setString(2, phones.getIp());
-                mainTableStatement.setString(3, phones.getStatus());
-                mainTableStatement.setString(4, phones.getDescription());
+                mainTableStatement.setString(3, phones.getAnswer().getStatus().equals("")?
+                        phones.getAnswer().getHttpCode():phones.getAnswer().getStatus());
+                mainTableStatement.setString(4, phones.getAnswer().getDescription());
                 mainTableStatement.setString(5, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(phones.getTime())));
                 mainTableStatement.execute();
                 ResultSet genKeys = mainTableStatement.getGeneratedKeys();

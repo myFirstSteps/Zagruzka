@@ -7,7 +7,8 @@ import javax.xml.bind.*;
 public class XMLSender {
 
     static final int READ_TIMEOUT = 3000;
-
+    /*В т.з. не указано каков интерфей у принимающего веб-сервиса, поэтому XML
+    отправляется в иде обычного потока через HttpURLConnection*/
     public static XMLAnswer sendXML(Sendable s, HttpURLConnection con) {
         XMLAnswer answer=new XMLAnswer();
         try {

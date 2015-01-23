@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <servlet>
+        <servlet-name>ZagruzkaServlet</servlet-name>
+        <servlet-class>tk.pankratovm.zagruzka.web.ZagruzkaServlet</servlet-class>
+        <init-param>
+            <!--URL для подключения к DB-->
+            <param-name>DB_URL</param-name>
+            <param-value>jdbc:mysql://localhost:3306/zagruzka</param-value>
+        </init-param>
+        <init-param>
+            <!--Login для подключения к DB-->
+            <param-name>DB_LOGIN</param-name>
+            <param-value>root</param-value>
+        </init-param>
+        <init-param>
+            <!--Пароль для подключения к DB-->
+            <param-name>DB_PASSWORD</param-name>
+            <param-value>589031</param-value>
+        </init-param>
+        <init-param>
+            <!--Имя таблици DB для лога отправок списков телефонов-->
+            <param-name>PHONE_LISTS</param-name>
+            <param-value>phone_list</param-value>
+        </init-param>
+        <init-param>
+            <!--Имя таблици DB для номеров телефонов-->
+            <param-name>PHONES</param-name>
+            <param-value>phones</param-value>
+        </init-param>
+        <init-param>
+            <!--URL партнера-->
+            <param-name>PARTNER_URL</param-name>
+            <param-value>http://127.0.0.1:8080/Zagruzka/Test</param-value>
+        </init-param>
+    </servlet>
+     <!--Этот сервлет только для тестирования и настройки-->
+    <servlet>
+        <servlet-name>Test</servlet-name>
+        <servlet-class>tk.pankratovm.zagruzka.web.Test</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ZagruzkaServlet</servlet-name>
+        <url-pattern>/Zagruzka.serv</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Test</servlet-name>
+        <url-pattern>/Test</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+    <error-page>
+        <location>/errorPage.jsp</location>
+    </error-page>
+</web-app>

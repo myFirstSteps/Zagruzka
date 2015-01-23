@@ -1,24 +1,33 @@
-package tk.pankratov.model;
+package tk.pankratovm.zagruzka.model;
+
 import java.util.*;
 import javax.xml.bind.annotation.*;
+/*
+ Сущность пользовательской посылки. Содержит список отправляемых номеров, 
+ ip пользователя, время отправки. После успешной отправки добавляется ответ партнера.
+ */
 
 @XmlRootElement(name = "ROOT")
-public class Phones implements Sendable {
+public class Phones {
 
-    private long time;
+    private long time = System.currentTimeMillis();
+    ;
     private String ip = "";
     /*В задании не указано допускается ли дублирование номеров в списке.
-     Исходя из здравого смысла принимаю решение,что дублирование не допускается. */
+     Исходя из здравого смысла, принимаю решение,что дублирование не допускается. */
     private Set<Long> phoneNumbers = new LinkedHashSet<>();
+    /*В задании сказано, что номера в формате int(11). Однако, если под "11" понимать
+     кол-во бит, максимальное значение такого числа 1023. Если  "11" понимать, как
+     кол-во значащих цифр, то номер должен хранится в long.
+     */
     private XMLAnswer answer = new XMLAnswer();
 
     public Phones() {
     }
 
     public Phones(String SenderIp, Set<Long> SetOfPhones) {
-        time = System.currentTimeMillis();
         phoneNumbers = SetOfPhones;
-        ip=SenderIp;
+        ip = SenderIp;
     }
 
     @XmlTransient

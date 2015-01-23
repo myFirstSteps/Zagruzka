@@ -30,7 +30,7 @@
             <textarea id="phones" rows="10" cols="20" name="phoneNumbers">78567453356</textarea>
 
         </form>
-        <button   onclick="validateAndSend()">Отправит</button>
+        <button   onclick="validateAndSend()">Отправить</button>
         <script src='scripts/jquery-1.11.1.min.js'></script> 
         <script>
             //Проверка введенных номеров телевонов. С последующей отправкой.

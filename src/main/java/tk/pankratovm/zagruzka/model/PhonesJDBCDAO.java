@@ -29,7 +29,7 @@ public class PhonesJDBCDAO {
         final String firstStatement = String.format("INSERT INTO %s  values (?,?,?,?,?)", MAIN_TABLE);
         final String secondStatement = String.format("INSERT INTO %s  values (?,?,?)", PHONES_TABLE);
         boolean result = false;
-        try (Connection con = DriverManager.getConnection(DB_URL, LOGIN, PASSWORD);) {
+        try (Connection con = DriverManager.getConnection(DB_URL, LOGIN, PASSWORD);) { //Соединение закрывается автоматически.
             try {
                 con.setAutoCommit(false);
                 PreparedStatement mainTableStatement = con.prepareStatement(firstStatement, Statement.RETURN_GENERATED_KEYS);
@@ -43,13 +43,13 @@ public class PhonesJDBCDAO {
                 mainTableStatement.execute();
                 ResultSet genKeys = mainTableStatement.getGeneratedKeys();
                 genKeys.next();
-                phonesTableStatement.setInt(3, genKeys.getInt(1));
+                phonesTableStatement.setInt(3, genKeys.getInt(1)); //Устанавливаем внешний ключ.
                 phonesTableStatement.setNull(1, Types.NULL);
-                for (long number : phones.getPhoneNumbers()) {
+                for (long number : phones.getPhoneNumbers()) { //Добавляем номера.
                     phonesTableStatement.setLong(2, number);
                     phonesTableStatement.execute();
                 }
-                con.commit();
+                con.commit(); //коммитим
             } catch (SQLException ex) {
                 //Если случилась ошибка, то откатываем.
                 con.rollback();
@@ -57,6 +57,7 @@ public class PhonesJDBCDAO {
                 con.setAutoCommit(true);
             };
         } catch (SQLException ex) {
+            System.err.println(ex);
             ex.printStackTrace();
         }
         return result;

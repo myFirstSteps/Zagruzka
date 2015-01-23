@@ -1,9 +1,6 @@
 package tk.pankratovm.zagruzka.web;
 
-import tk.pankratovm.zagruzka.model.Phones;
-import tk.pankratovm.zagruzka.model.XMLAnswer;
-import tk.pankratovm.zagruzka.model.XMLSender;
-import tk.pankratovm.zagruzka.model.PhonesJDBCDAO;
+import tk.pankratovm.zagruzka.model.*;
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
@@ -35,16 +32,15 @@ public class ZagruzkaServlet extends HttpServlet {
         param.put("dbPassword", config.getInitParameter("DB_PASSWORD"));
         param.put("phoneListsTable", config.getInitParameter("PHONE_LISTS"));
         param.put("phonesTable", config.getInitParameter("PHONES"));
-        
-        
+
         ServletContext context = config.getServletContext();
         for (Map.Entry<String, String> p : param.entrySet()) {
             //проверяем все ли инициализационные параметры заданы.
             if (p.getValue() == null) {
-               /* Здесь и в остальных классах я не использую логер, чтобы не 
-                       перегружать проект зависимостями и кодом. Я  умею 
-                       пользоваться log4j, но вместо log.error(e) или log.debug(e)
-                       я буду писать System.err.println(e).  */
+                /* Здесь и в остальных классах я не использую логер, чтобы не 
+                 перегружать проект зависимостями и кодом. Я  умею 
+                 пользоваться log4j, но вместо log.error(e) или log.debug(e)
+                 я буду писать System.err.println(e).  */
                 System.err.println(String.format("Ошибка в дескрипторе развертывания. Не задан: %s", p.getKey()));
                 throw new ServletException("Ошибка в дескрипторе развертывания.");
             } else {
@@ -77,14 +73,9 @@ public class ZagruzkaServlet extends HttpServlet {
             // Создание отправляемой сущности
             Phones phones = new Phones(request.getRemoteAddr(), phoneSet);
             /*В т.з. не указано какой интерфейc у принимающего веб-сервиса, поэтому XML
-                отправляется в виде обычного потока через HttpURLConnection. Без параметров*/
-            URL url = new URL((String) context.getAttribute("partnerURL"));
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setDoOutput(true);
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "text/xml");
+             отправляется в виде обычного потока через HttpURLConnection. Без параметров*/ 
             //Отправляем список партнеру
-            answer = XMLSender.sendXML(phones, con);
+            answer = XMLSender.sendXML(phones, new URL((String) context.getAttribute("partnerURL")));
             //Присваиваем ответ
             phones.setAnswer(answer);
             //Сохраняем в DB
@@ -95,17 +86,17 @@ public class ZagruzkaServlet extends HttpServlet {
                     (String) context.getAttribute("phoneListsTable"),
                     (String) context.getAttribute("phonesTable")
             ).savePhones(phones);
-            //регистрируем ответ для отображения
+            //Регистрируем ответ для отображения.
             request.setAttribute("XMLAnswer", answer);
 
         } catch (NumberFormatException e) {
             /*Если проскочил некорректный номер(например, при отправке  через консоль),
              отвечаем ошибкой
-            */
-            response.getWriter().println("Ошибка при вводе телефонов.");    
+             */
+            response.getWriter().println("Ошибка при вводе телефонов.");
             return;
         }
-        //пробрасываем на отображение
+        //Пробрасываем на отображение.
         request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 }

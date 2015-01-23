@@ -1,9 +1,3 @@
-<%-- 
-    Document   : errorPage
-    Created on : 22.01.2015, 16:04:01
-    Author     : pankratov
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

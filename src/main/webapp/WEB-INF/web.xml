@@ -16,7 +16,7 @@
         <init-param>
             <!--Пароль для подключения к DB-->
             <param-name>DB_PASSWORD</param-name>
-            <param-value>williamnh</param-value>
+            <param-value>589031</param-value>
         </init-param>
         <init-param>
             <!--Имя таблици DB для лога отправок списков телефонов-->
@@ -31,16 +31,13 @@
         <init-param>
             <!--URL партнера-->
             <param-name>PARTNER_URL</param-name>
-            <param-value>http://127.0.0.2:8080/Zagruzka/Test</param-value>
+            <param-value>http://127.0.0.1:8080/Zagruzka/Test</param-value>
         </init-param>
     </servlet>
+     <!--Этот сервлет только для тестирования и настройки-->
     <servlet>
         <servlet-name>Test</servlet-name>
         <servlet-class>tk.pankratovm.zagruzka.web.Test</servlet-class>
-        <init-param>
-            <param-name>responseCode</param-name>
-            <param-value>200</param-value>
-        </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>ZagruzkaServlet</servlet-name>

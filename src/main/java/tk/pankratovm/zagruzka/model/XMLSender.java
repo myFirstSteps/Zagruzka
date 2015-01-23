@@ -5,11 +5,14 @@ import java.net.*;
 import javax.xml.bind.*;
 
 public class XMLSender {
-    
 
-    public static XMLAnswer sendXML(Phones s, HttpURLConnection con) {
+    public static XMLAnswer sendXML(Phones s, URL url) throws IOException {
         XMLAnswer answer = new XMLAnswer();
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
         try {
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "text/xml");
             JAXBContext reqContext = JAXBContext.newInstance(s.getClass());
             Marshaller m = reqContext.createMarshaller();
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -17,18 +20,17 @@ public class XMLSender {
             con.getOutputStream().flush();
 
             JAXBContext respContext = JAXBContext.newInstance(XMLAnswer.class);
-            Unmarshaller unm = respContext.createUnmarshaller(); 
-            if (con.getResponseCode() >= 200 && con.getResponseCode() < 300 && con.getInputStream().available() > 0) {
-                try {
-                    answer = (XMLAnswer) unm.unmarshal(con.getInputStream());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            Unmarshaller unm = respContext.createUnmarshaller();
+            //Пробуем получить ответ.
+            try {
+                answer = (XMLAnswer) unm.unmarshal(con.getInputStream());
+            } catch (Exception e) {
+                System.err.println(e);
             }
+
             answer.setHttpCode(con.getResponseCode());
-            con.disconnect();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e);
         } finally {
             con.disconnect();
         }

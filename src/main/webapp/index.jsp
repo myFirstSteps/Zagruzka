@@ -10,13 +10,15 @@
         разметку и стили нужно держать отдельно--%>
         <style type="text/css">
             h1{font-size: 20px;}
+            form * {display: block;}
             #phones{font-size: 22px;}
             #info{color: <c:choose><c:when test='${XMLAnswer.status!=""}'>green</c:when>
                           <c:otherwise>red</c:otherwise>
                       </c:choose>;}
-            </style>
+        </style>
         </head>
         <body>
+
             <form id="form" action="Zagruzka.serv" method="post">
             <h1>Номера телефонов</h1>
             <span  id="info">
@@ -24,11 +26,11 @@
                     <c:when test='${XMLAnswer.status ne null}'>Данные успешно переданы!
                     </c:when>
                 </c:choose>
-            </span> <br>
+            </span>
             <textarea id="phones" rows="10" cols="20" name="phoneNumbers">78567453356</textarea>
-            <br>
+
         </form>
-        <button  onclick="validateAndSend()">Отправит</button>
+        <button   onclick="validateAndSend()">Отправит</button>
         <script src='scripts/jquery-1.11.1.min.js'></script> 
         <script>
             //Проверка введенных номеров телевонов. С последующей отправкой.
